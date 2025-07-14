@@ -1,131 +1,229 @@
-# Sistema de Scraping y Análisis de Tesis SCJN
+# 🏛️ IA-IUS-SCRAPPING: Sistema Inteligente de Scraping SCJN
 
-Este proyecto automatiza la recolección, almacenamiento y análisis de tesis y jurisprudencia de la Suprema Corte de Justicia de la Nación (SCJN).
+[![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![GitHub](https://img.shields.io/badge/GitHub-Lbassoco95-green.svg)](https://github.com/Lbassoco95)
 
-## Características
+Sistema automatizado de scraping, almacenamiento y análisis inteligente de tesis y jurisprudencia de la **Suprema Corte de Justicia de la Nación (SCJN)** utilizando tecnologías de Inteligencia Artificial.
 
-- 🔍 **Scraping automático** de la página de búsqueda de tesis
-- 📥 **Descarga automática** de PDFs a Google Drive
-- 🧠 **Análisis con IA** usando OpenAI GPT
-- 📊 **Base de datos** para consultas estructuradas
-- 💬 **Chat integrado** para consultas en lenguaje natural
-- 🏷️ **Categorización automática** de documentos
+## 🚀 Características Principales
 
-## Instalación
+### 🔍 **Scraping Inteligente**
+- **Automatización completa** del proceso de búsqueda y descarga
+- **Detección automática** de nuevas tesis publicadas
+- **Descarga masiva** de PDFs con gestión de errores
+- **Extracción de metadatos** estructurados
 
-1. **Clonar el repositorio:**
+### 🧠 **Análisis con IA**
+- **Categorización automática** usando OpenAI GPT
+- **Resumen inteligente** de contenido jurídico
+- **Extracción de conceptos clave** y jurisprudencia
+- **Análisis de tendencias** legales
+
+### ☁️ **Almacenamiento en la Nube**
+- **Integración con Google Drive** para almacenamiento seguro
+- **Organización automática** por categorías y fechas
+- **Backup automático** de datos críticos
+
+### 📊 **Base de Datos Avanzada**
+- **PostgreSQL** para producción escalable
+- **SQLite** para desarrollo local
+- **Consultas estructuradas** y búsquedas avanzadas
+- **Relaciones entre documentos** y jurisprudencia
+
+### 🤖 **Automatización Completa**
+- **Ejecución programada** con cron jobs
+- **Monitoreo continuo** del sistema
+- **Alertas automáticas** por email
+- **Logs detallados** para debugging
+
+## 📋 Estado Actual del Proyecto
+
+### ✅ **Funcionalidades Implementadas**
+- [x] Scraping básico de SCJN
+- [x] Descarga automática de PDFs
+- [x] Integración con Google Drive
+- [x] Análisis con OpenAI GPT
+- [x] Base de datos SQLite/PostgreSQL
+- [x] Sistema de logging
+- [x] Configuración automatizada
+- [x] Scripts de deployment en la nube
+
+### 🔄 **En Desarrollo**
+- [ ] API REST completa
+- [ ] Interfaz web de consultas
+- [ ] Chat inteligente
+- [ ] Dashboard de monitoreo
+- [ ] Análisis de tendencias
+
+### 📈 **Próximas Funcionalidades**
+- [ ] Machine Learning para clasificación
+- [ ] Análisis de sentimientos jurídicos
+- [ ] Predicción de tendencias legales
+- [ ] Integración con otros sistemas jurídicos
+
+## 🛠️ Instalación y Configuración
+
+### Prerrequisitos
+- Python 3.8 o superior
+- Git
+- Cuenta de Google Cloud Platform
+- API Key de OpenAI (opcional)
+
+### 1. **Clonar el Repositorio**
 ```bash
-git clone <tu-repositorio>
-cd ia-scrapping-tesis
+git clone https://github.com/Lbassoco95/ia-ius-scrapping.git
+cd ia-ius-scrapping
 ```
 
-2. **Crear entorno virtual:**
+### 2. **Configurar Entorno Virtual**
 ```bash
 python -m venv venv
-source venv/bin/activate  # En Windows: venv\Scripts\activate
+source venv/bin/activate  # macOS/Linux
+# venv\Scripts\activate   # Windows
 ```
 
-3. **Instalar dependencias:**
+### 3. **Instalar Dependencias**
 ```bash
 pip install -r requirements.txt
 ```
 
-4. **Configurar variables de entorno:**
+### 4. **Configurar Variables de Entorno**
 ```bash
 cp .env.example .env
 # Editar .env con tus credenciales
 ```
 
-5. **Configurar Google Drive API:**
-   - Crear proyecto en Google Cloud Console
-   - Habilitar Google Drive API
-   - Descargar credenciales JSON
-   - Colocar en `credentials/google_drive_credentials.json`
-
-## Configuración
-
-### Variables de entorno (.env)
+### 5. **Configurar Google Drive API**
+```bash
+# Ejecutar el script de configuración
+python setup_google_drive.py
 ```
-# OpenAI
+
+## ⚙️ Configuración Detallada
+
+### Variables de Entorno (.env)
+```env
+# OpenAI (Opcional)
+OPENAI_ENABLED=true
 OPENAI_API_KEY=tu_api_key_de_openai
+OPENAI_MODEL=gpt-3.5-turbo
 
 # Google Drive
+GOOGLE_DRIVE_ENABLED=true
+GOOGLE_DRIVE_FOLDER_ID=tu_folder_id
 GOOGLE_DRIVE_CREDENTIALS_PATH=credentials/google_drive_credentials.json
-GOOGLE_DRIVE_FOLDER_ID=tu_folder_id_de_google_drive
 
-# Database
-DATABASE_URL=sqlite:///tesis_scjn.db
+# Base de Datos
+DATABASE_URL=sqlite:///data/scjn_database.db
+# Para PostgreSQL: postgresql://user:pass@localhost/scjn_db
 
 # Scraping
 SCJN_BASE_URL=https://sjf2.scjn.gob.mx
 SEARCH_URL=https://sjf2.scjn.gob.mx/busqueda-principal-tesis
+MAX_FILES_PER_SESSION=200
+DEFAULT_TIMEOUT=30
+
+# Logging
+LOG_LEVEL=INFO
+TIMEZONE=America/Mexico_City
 ```
 
-## Uso
+## 🚀 Uso Rápido
 
-### 1. Ejecutar scraping inicial
+### **Ejecutar Scraping Manual**
 ```bash
-python src/scraper/main.py
+python run_scraping_now.py
 ```
 
-### 2. Iniciar servidor web
+### **Configurar Scraping Automático**
 ```bash
-python src/api/main.py
+python setup_cron.sh
 ```
 
-### 3. Usar el chat de consultas
+### **Monitorear Sistema**
 ```bash
-python src/chat/chat_interface.py
+python monitor_production.py
 ```
 
-## Estructura del Proyecto
-
-```
-ia-scrapping-tesis/
-├── src/
-│   ├── scraper/          # Módulo de scraping
-│   ├── storage/          # Gestión de Google Drive
-│   ├── analysis/         # Análisis con IA
-│   ├── database/         # Base de datos
-│   ├── api/             # API REST
-│   └── chat/            # Interfaz de chat
-├── data/                # Datos descargados
-├── credentials/         # Credenciales de APIs
-├── logs/               # Logs del sistema
-└── tests/              # Pruebas unitarias
+### **Migrar a PostgreSQL**
+```bash
+python migrate_to_postgresql.py
 ```
 
-## Funcionalidades
+## 📁 Estructura del Proyecto
 
-### Scraping Automático
-- Monitoreo continuo de nuevas tesis
-- Descarga automática de PDFs
-- Extracción de metadatos
+```
+ia-ius-scrapping/
+├── 📁 src/                    # Código fuente principal
+│   ├── 📁 scraper/           # Módulo de scraping SCJN
+│   ├── 📁 storage/           # Gestión de Google Drive
+│   ├── 📁 analysis/          # Análisis con IA
+│   ├── 📁 database/          # Modelos de base de datos
+│   ├── 📁 api/              # API REST (en desarrollo)
+│   ├── 📁 chat/             # Interfaz de chat (en desarrollo)
+│   └── 📁 automation/       # Automatización del sistema
+├── 📁 data/                 # Datos descargados y procesados
+├── 📁 credentials/          # Credenciales de APIs
+├── 📁 logs/                # Logs del sistema
+├── 📁 tests/               # Pruebas unitarias
+├── 📁 aws_deployment/      # Scripts para AWS
+├── 📁 google_cloud_deployment/ # Scripts para Google Cloud
+└── 📄 *.py                 # Scripts principales
+```
 
-### Análisis con IA
-- Categorización automática
-- Resumen de contenido
-- Extracción de conceptos clave
-- Análisis de jurisprudencia
+## 🔧 Scripts Principales
 
-### Base de Datos
-- Almacenamiento estructurado
-- Búsquedas avanzadas
-- Relaciones entre documentos
+| Script | Descripción |
+|--------|-------------|
+| `run_scraping_now.py` | Ejecuta scraping inmediato |
+| `auto_scraper_controller.py` | Controlador principal del sistema |
+| `setup_google_drive.py` | Configuración de Google Drive |
+| `migrate_to_postgresql.py` | Migración a PostgreSQL |
+| `monitor_production.py` | Monitoreo del sistema |
+| `production_scraper.py` | Scraper optimizado para producción |
 
-### Chat Inteligente
-- Consultas en lenguaje natural
-- Respuestas basadas en el contenido
-- Sugerencias de documentos relacionados
+## 📊 Estadísticas del Proyecto
 
-## Contribuir
+- **Archivos de código**: 97
+- **Líneas de código**: ~18,000
+- **Dependencias**: 25+ paquetes Python
+- **Integraciones**: Google Drive, OpenAI, PostgreSQL
+- **Plataformas soportadas**: AWS, Google Cloud, Local
 
-1. Fork el proyecto
-2. Crear rama para nueva funcionalidad
-3. Commit cambios
-4. Push a la rama
-5. Abrir Pull Request
+## 🤝 Contribuir
 
-## Licencia
+¡Las contribuciones son bienvenidas! 
 
-MIT License 
+1. **Fork** el proyecto
+2. **Crea** una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. **Commit** tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. **Push** a la rama (`git push origin feature/AmazingFeature`)
+5. **Abre** un Pull Request
+
+### Guías de Contribución
+- Sigue las convenciones de código Python (PEP 8)
+- Agrega tests para nuevas funcionalidades
+- Documenta cambios importantes
+- Mantén la compatibilidad con versiones anteriores
+
+## 📝 Licencia
+
+Este proyecto está bajo la Licencia MIT. Ver el archivo [LICENSE](LICENSE) para más detalles.
+
+## 📞 Contacto
+
+- **Autor**: Leopoldo Bassoco
+- **Email**: leo.bassoco@kawiil.mx
+- **GitHub**: [@Lbassoco95](https://github.com/Lbassoco95)
+
+## 🙏 Agradecimientos
+
+- **SCJN** por proporcionar acceso público a su jurisprudencia
+- **OpenAI** por las herramientas de IA
+- **Google Cloud** por la infraestructura en la nube
+- **Comunidad open source** por las librerías utilizadas
+
+---
+
+⭐ **¡Si este proyecto te es útil, considera darle una estrella en GitHub!** 
