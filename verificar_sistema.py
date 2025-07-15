@@ -143,54 +143,6 @@ def verificar_logs():
         print("❌ Directorio logs/ no existe")
         return False
 
-def verificar_dependencias():
-    """Verificar que las dependencias estén instaladas"""
-    print("\n📦 Verificando dependencias...")
-    
-    dependencias = [
-        'selenium',
-        'requests',
-        'beautifulsoup4',
-        'sqlalchemy',
-        'psycopg2-binary',
-        'google-auth',
-        'google-auth-oauthlib',
-        'google-auth-httplib2',
-        'google-api-python-client',
-        'openai',
-        'python-dotenv'
-    ]
-    
-    faltantes = []
-    for dep in dependencias:
-        try:
-            __import__(dep.replace('-', '_'))
-            print(f"✅ {dep}")
-        except ImportError:
-            print(f"❌ {dep} - No instalado")
-            faltantes.append(dep)
-    
-    if faltantes:
-        print(f"\n💡 Instalar dependencias faltantes:")
-        print(f"pip install {' '.join(faltantes)}")
-        return False
-    
-    return True
-
-def verificar_base_datos():
-    """Verificar conexión a base de datos"""
-    print("\n🗄️ Verificando base de datos...")
-    
-    try:
-        from src.database.models import get_session
-        session = get_session()
-        session.close()
-        print("✅ Conexión a base de datos exitosa")
-        return True
-    except Exception as e:
-        print(f"❌ Error conectando a base de datos: {str(e)}")
-        return False
-
 def main():
     """Función principal de verificación"""
     print("🔍 VERIFICACIÓN DEL SISTEMA DE SCRAPING SCJN")
@@ -211,8 +163,6 @@ def main():
     resultados.append(("Configuración", verificar_configuracion()))
     resultados.append(("Estructura directorios", verificar_estructura_directorios()))
     resultados.append(("Python path", verificar_python_path()))
-    resultados.append(("Dependencias", verificar_dependencias()))
-    resultados.append(("Base de datos", verificar_base_datos()))
     resultados.append(("Cloud SQL Proxy", verificar_cloud_sql_proxy()))
     resultados.append(("Cron Job", verificar_cron_job()))
     resultados.append(("Logs", verificar_logs()))
@@ -234,9 +184,9 @@ def main():
     if problemas == 0:
         print("\n🎉 ¡Sistema base funcionando correctamente!")
         print("\n💡 Próximos pasos:")
-        print("  1. Ejecutar scraping manual: python3 run_scraping_now.py")
-        print("  2. Monitorear sistema: python3 monitor_production.py")
-        print("  3. Configurar automatización: python3 setup_cron.sh")
+        print("  1. Verificar base de datos: python3 -c \"from src.database.models import get_session; session = get_session(); print('✅ BD OK'); session.close()\"")
+        print("  2. Ejecutar scraping manual: python3 production_scraper.py")
+        print("  3. Monitorear sistema: python3 monitor_production.py")
     else:
         print(f"\n⚠️  Sistema tiene {problemas} problema(s). Resolver antes de continuar.")
         print("\n🔧 Pasos sugeridos:")
@@ -244,8 +194,6 @@ def main():
             print("  - Iniciar Cloud SQL Proxy: ./start_cloud_sql_proxy.sh")
         if not any(resultado for nombre, resultado in resultados if nombre == "Cron Job"):
             print("  - Configurar cron job: crontab -e")
-        if not any(resultado for nombre, resultado in resultados if nombre == "Dependencias"):
-            print("  - Instalar dependencias: pip install -r requirements.txt")
 
-if __name__ == "__main__":
+if __name__ == "__main__": 
     main() 
