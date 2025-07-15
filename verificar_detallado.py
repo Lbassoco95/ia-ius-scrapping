@@ -177,6 +177,120 @@ def verificar_base_datos():
         print(f"❌ Error conectando a base de datos: {e}")
         return False
 
+def ejecutar_scripts_prueba():
+    """Ejecutar scripts de prueba disponibles"""
+    print("\n🚀 EJECUCIÓN DE SCRIPTS DE PRUEBA")
+    print("=" * 40)
+    
+    scripts_prueba = [
+        'simple_test_vm.py',
+        'test_basic_scraping.py',
+        'test_system.py',
+        'test_final_system.py'
+    ]
+    
+    for script in scripts_prueba:
+        if os.path.exists(script):
+            print(f"\n📋 Ejecutando {script}:")
+            try:
+                result = subprocess.run(['python3', script], 
+                                      capture_output=True, text=True, 
+                                      timeout=30)  # Timeout de 30 segundos
+                
+                if result.returncode == 0:
+                    print(f"  ✅ {script} - Exitoso")
+                    # Mostrar primeras líneas de salida
+                    output_lines = result.stdout.strip().split('\n')
+                    for line in output_lines[:5]:
+                        if line.strip():
+                            print(f"    📄 {line}")
+                    if len(output_lines) > 5:
+                        print(f"    ... y {len(output_lines) - 5} líneas más")
+                else:
+                    print(f"  ❌ {script} - Falló")
+                    if result.stderr.strip():
+                        print(f"    Error: {result.stderr.strip()}")
+                        
+            except subprocess.TimeoutExpired:
+                print(f"  ⏰ {script} - Timeout (30s)")
+            except Exception as e:
+                print(f"  ❌ {script} - Error: {e}")
+        else:
+            print(f"  ⚠️  {script} - No encontrado")
+    
+    return True
+
+def verificar_logs_recientes():
+    """Verificar logs recientes del sistema"""
+    print("\n📄 VERIFICACIÓN DE LOGS RECIENTES")
+    print("=" * 40)
+    
+    if not os.path.exists('logs/'):
+        print("❌ Directorio logs/ no existe")
+        return False
+    
+    try:
+        # Encontrar el log más reciente
+        result = subprocess.run([
+            'find', 'logs/', '-name', '*.log', '-type', 'f', 
+            '-exec', 'ls', '-t', '{}', '+'
+        ], capture_output=True, text=True)
+        
+        if result.returncode == 0 and result.stdout.strip():
+            log_files = result.stdout.strip().split('\n')
+            if log_files:
+                ultimo_log = log_files[0]
+                print(f"📄 Último log: {ultimo_log}")
+                
+                # Mostrar últimas 20 líneas del log más reciente
+                try:
+                    tail_result = subprocess.run([
+                        'tail', '-20', ultimo_log
+                    ], capture_output=True, text=True)
+                    
+                    if tail_result.returncode == 0:
+                        print("📋 Últimas 20 líneas:")
+                        lines = tail_result.stdout.strip().split('\n')
+                        for line in lines:
+                            if line.strip():
+                                print(f"    📄 {line}")
+                    else:
+                        print("❌ Error leyendo el log")
+                        
+                except Exception as e:
+                    print(f"❌ Error: {e}")
+            else:
+                print("❌ No se encontraron archivos de log")
+        else:
+            print("❌ No hay logs recientes")
+            
+    except Exception as e:
+        print(f"❌ Error verificando logs: {e}")
+    
+    # Mostrar estadísticas de logs
+    try:
+        log_files = [f for f in os.listdir('logs/') if f.endswith('.log')]
+        if log_files:
+            print(f"\n📊 Estadísticas de logs:")
+            print(f"  📄 Total de archivos de log: {len(log_files)}")
+            
+            # Mostrar logs más grandes
+            log_sizes = []
+            for log_file in log_files:
+                path = os.path.join('logs/', log_file)
+                size = os.path.getsize(path)
+                log_sizes.append((log_file, size))
+            
+            log_sizes.sort(key=lambda x: x[1], reverse=True)
+            print("  📄 Logs más grandes:")
+            for log_file, size in log_sizes[:3]:
+                print(f"    📄 {log_file} ({size} bytes)")
+    
+    except Exception as e:
+        print(f"❌ Error obteniendo estadísticas: {e}")
+    
+    return True
+
 def verificar_servicios():
     """Verificar servicios del sistema"""
     print("\n🔍 VERIFICACIÓN DE SERVICIOS")
@@ -229,6 +343,8 @@ def main():
     resultados.append(("Estructura código", verificar_estructura_codigo()))
     resultados.append(("Importaciones", probar_importaciones()))
     resultados.append(("Base de datos", verificar_base_datos()))
+    resultados.append(("Scripts de prueba", ejecutar_scripts_prueba()))
+    resultados.append(("Logs recientes", verificar_logs_recientes()))
     resultados.append(("Servicios", verificar_servicios()))
     
     # Resumen final
