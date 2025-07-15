@@ -1,10 +1,41 @@
 #!/bin/bash
-echo "⏰ Configurando cron job para mañana a las 5:00 AM..."
+echo "⏰ CONFIGURANDO CRON JOB PARA SCRAPER SCJN"
+echo "=========================================="
 
-# Agregar al cron
-(crontab -l 2>/dev/null; echo "0 5 * * * cd /Users/leopoldobassoconova/Library/Mobile Documents/com~apple~CloudDocs/REPOSITORIOS/ia-scrapping-tesis && /Users/leopoldobassoconova/Library/Mobile Documents/com~apple~CloudDocs/REPOSITORIOS/ia-scrapping-tesis/venv/bin/python3 /Users/leopoldobassoconova/Library/Mobile Documents/com~apple~CloudDocs/REPOSITORIOS/ia-scrapping-tesis/production_scraper.py") | crontab -
+# Obtener directorio actual
+CURRENT_DIR=$(pwd)
+echo "📂 Directorio: $CURRENT_DIR"
 
-echo "✅ Cron job configurado"
-echo "📋 Comando: 0 5 * * * cd /Users/leopoldobassoconova/Library/Mobile Documents/com~apple~CloudDocs/REPOSITORIOS/ia-scrapping-tesis && /Users/leopoldobassoconova/Library/Mobile Documents/com~apple~CloudDocs/REPOSITORIOS/ia-scrapping-tesis/venv/bin/python3 /Users/leopoldobassoconova/Library/Mobile Documents/com~apple~CloudDocs/REPOSITORIOS/ia-scrapping-tesis/production_scraper.py"
-echo "📝 Para ver cron jobs: crontab -l"
-echo "📝 Para remover: crontab -r"
+# Crear script de ejecución
+cat > run_scraper_cron.sh << EOF
+#!/bin/bash
+cd $CURRENT_DIR
+source venv/bin/activate
+python3 run_scraper.py >> logs/cron_scraper.log 2>&1
+EOF
+
+chmod +x run_scraper_cron.sh
+echo "✅ Script de ejecución creado"
+
+# Crear directorio de logs si no existe
+mkdir -p logs
+echo "✅ Directorio de logs creado"
+
+# Mostrar instrucciones para cron
+echo ""
+echo "🔧 PARA CONFIGURAR CRON JOB:"
+echo "1. Ejecuta: crontab -e"
+echo "2. Agrega una de estas líneas:"
+echo ""
+echo "   # Ejecutar cada 6 horas"
+echo "   0 */6 * * * $CURRENT_DIR/run_scraper_cron.sh"
+echo ""
+echo "   # Ejecutar diario a las 2 AM"
+echo "   0 2 * * * $CURRENT_DIR/run_scraper_cron.sh"
+echo ""
+echo "   # Ejecutar cada 12 horas"
+echo "   0 */12 * * * $CURRENT_DIR/run_scraper_cron.sh"
+echo ""
+echo "3. Guarda y sale (Ctrl+X, Y, Enter)"
+echo ""
+echo "📊 Para ver logs: tail -f logs/cron_scraper.log"
