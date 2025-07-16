@@ -1,9 +1,10 @@
-# Web scraping
+# Web scraping optimizado
 selenium==4.15.2
 beautifulsoup4==4.12.2
 requests==2.31.0
 lxml==4.9.3
 webdriver-manager==4.0.1
+aiohttp==3.9.1
 
 # Google Drive API
 google-auth==2.23.4
@@ -16,8 +17,9 @@ PyPDF2==3.0.1
 pdfplumber==0.10.2
 pymupdf==1.23.8
 
-# Database
+# Database optimizada
 sqlalchemy==2.0.23
+psycopg2-binary==2.9.9
 
 # AI and NLP
 openai==1.30.5
@@ -34,9 +36,28 @@ numpy==1.25.2
 fastapi==0.104.1
 uvicorn==0.24.0
 
-# Utilities
+# Utilities optimizadas
 python-dotenv==1.0.0
 schedule==1.2.0
-tqdm==4.66.1 
-# PostgreSQL driver
-psycopg2-binary==2.9.9
+tqdm==4.66.1
+pytz==2023.3
+
+# Logging y monitoreo
+colorlog==6.8.0
+structlog==23.2.0
+
+# Performance y concurrencia
+asyncio
+concurrent.futures
+threading
+multiprocessing
+
+# Testing
+pytest==7.4.3
+pytest-asyncio==0.21.1
+pytest-cov==4.1.0
+
+# Desarrollo
+black==23.11.0
+flake8==6.1.0
+mypy==1.7.1
