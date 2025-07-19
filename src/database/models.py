@@ -161,7 +161,8 @@ def check_database_health():
         session = get_session()
         
         # Verificar conexión
-        session.execute("SELECT 1")
+        from sqlalchemy import text
+        session.execute(text("SELECT 1"))
         
         # Contar registros
         total_tesis = session.query(Tesis).count()
